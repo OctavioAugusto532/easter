@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Acesso</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle, #050505, #000);
+    color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    transition: 1.5s;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 15px;
+    background: rgba(0,0,0,0.75);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    transition: 1s;
+}
+
+.light-mode { color: #333; }
+.light-mode .container {
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 30px rgba(255,192,203,0.4);
+}
+
+.cute-font { font-family: 'Quicksand', sans-serif; }
+.elegant { font-family: 'Playfair Display', serif; }
+
+input {
+    padding: 12px;
+    width: 80%;
+    border-radius: 10px;
+    border: 1px solid #444;
+    margin-top: 20px;
+    background: #111;
+    color: white;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #444;
+    color: white;
+    transition: 0.3s;
+}
+
+#text {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    min-height: 60px;
+}
+
+.final { max-width: 750px; padding: 40px; }
+
+#particles {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1;
+}
+
+#particles span { position: absolute; animation: float 6s linear infinite; }
+
+@keyframes float {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+
+img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<div class="container" id="box">
+    <h2 id="title">Acesso restrito...</h2>
+    <div id="text"></div>
+    <input id="input">
+    <br>
+    <button id="btn" onclick="next()">Confirmar</button>
+</div>
+
+<script>
+let etapa = 0;
+let isTyping = false;
+
+const fases = [
+{
+    tipo:"enigma",
+    texto:`Tenho o formato de um tubinho recheado,
+sempre venho crocante e muito bem acompanhado.
+Meu nome é curto, mas meu sabor é de primeira,
+sou o wafer favorito em qualquer prateleira.
+
+Sabe dizer meu nome?`,
+    validar:(r)=>r.includes("tren")
+},
+{
+    tipo:"texto",
+    texto:`Você tem um jeito que não passa despercebido.
+Uma presença que marca.
+E uma essência que... sinceramente?
+
+É difícil encontrar igual.`
+},
+{
+    tipo:"enigma",
+    texto:`Seis de um lado, seis do outro,
+a bola não pode encostar no chão.
+Tem quem levante, quem bata com força,
+e quem defenda com o coração.
+
+Qual é o jogo?`,
+    validar:(r)=>r.includes("vo")
+},
+{
+    tipo:"texto",
+    texto:`O vôlei combina com você porque exige atitude.
+
+Você tem um jeito que não passa despercebido e uma presença que marca dentro e fora da quadra. É aquela pessoa que fecha o time, que joga junto e tem uma essência única.`
+},
+{
+    tipo:"enigma",
+    texto:`Busco entender o que não se vê,
+dando voz ao que o silêncio esconde.
+Não dou resposta, mas ajudo você
+a descobrir o caminho e o porquê.
+
+O que eu estudo?`,
+    validar:(r)=>r.includes("psico")
+},
+{
+    tipo:"texto",
+    texto:`A psicologia tem tudo a ver com você porque exige saber ouvir e entender o que ninguém fala.
+
+Sua capacidade de perceber os detalhes mostra uma essência difícil de encontrar igual. Sorte de quem vai ter você por perto no futuro.`
+},
+{
+    tipo:"final"
+}
+];
+
+function typeWriter(text, element, speed = 30) {
+    if (isTyping) return;
+    isTyping = true;
+    element.innerHTML = "";
+    let i = 0;
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+        } else {
+            isTyping = false;
+        }
+    }
+    typing();
+}
+
+function next() {
+    if (isTyping) return;
+    const input = document.getElementById("input");
+    const fase = fases[etapa];
+
+    if (fase.tipo === "enigma") {
+        let val = input.value.toLowerCase().trim();
+        if (!fase.validar(val)) {
+            input.style.border = "2px solid red";
+            return;
+        }
+    }
+
+    etapa++;
+    render();
+}
+
+function render() {
+    const box = document.getElementById("box");
+    const title = document.getElementById("title");
+    const text = document.getElementById("text");
+    const input = document.getElementById("input");
+    const btn = document.getElementById("btn");
+
+    const fase = fases[etapa];
+    if (!fase) return;
+
+    if (etapa >= 2) document.body.classList.add("light-mode");
+    if (etapa >= 4) box.classList.add("elegant");
+
+    if (fase.tipo === "enigma") {
+        title.innerText = "Continue...";
+        input.style.display = "inline-block";
+        btn.style.display = "inline-block";
+        btn.innerText = "Confirmar";
+        btn.onclick = next;
+        input.value = "";
+        typeWriter(fase.texto, text);
+    }
+
+    if (fase.tipo === "texto") {
+        title.innerText = "...";
+        input.style.display = "none";
+        btn.innerText = "Continuar";
+        btn.onclick = () => { if(!isTyping) { etapa++; render(); } };
+        typeWriter(fase.texto, text);
+    }
+
+    if (fase.tipo === "final") {
+        box.classList.add("final");
+        title.innerText = "Pra você 💖";
+        typeWriter(`Se você chegou até aqui... é porque é você mesmo.
+
+E eu só queria que você nunca esquecesse disso:
+Você é extremamente importante.
+E tem um valor que não dá pra medir.
+
+💖 Feliz Páscoa 💖`, text);
+
+        input.style.display = "none";
+        btn.style.display = "none";
+        
+        const img = document.createElement("img");
+        img.src = "pascoa.png.jpeg";
+        box.appendChild(img);
+        
+        startParticles();
+    }
+}
+
+function startParticles() {
+    const container = document.getElementById("particles");
+    setInterval(() => {
+        const el = document.createElement("span");
+        el.innerText = ["💖","🌸","✨"][Math.floor(Math.random()*3)];
+        el.style.left = Math.random()*100 + "vw";
+        el.style.fontSize = (Math.random()*20+15)+"px";
+        container.appendChild(el);
+        setTimeout(()=>el.remove(),6000);
+    },300);
+}
+
+render();
+</script>
+
+</body>
+</html>
