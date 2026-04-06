@@ -90,6 +90,38 @@ img {
     border-radius: 15px;
     margin-top: 20px;
 }
+    /* Ajustes para Mobile */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Menos espaço em volta pra sobrar pro card */
+        align-items: flex-start; /* Alinha no topo se o texto for longo */
+        padding-top: 30px;
+    }
+
+    .container {
+        width: 95%; /* Ocupa quase a tela toda na largura */
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #text {
+        font-size: 15px; /* Texto um pouco menor para caber melhor */
+        min-height: auto; /* Deixa o container crescer conforme o texto */
+    }
+
+    input {
+        width: 90%; /* Input mais largo no celular */
+    }
+
+    img {
+        width: 100%; /* Imagem sempre 100% da largura do card */
+        height: auto;
+    }
+
+    .final {
+        padding: 20px;
+    }
+}
 </style>
 </head>
 
